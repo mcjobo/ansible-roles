@@ -1,0 +1,4 @@
+---
+# tasks file for roles/install_nextcloud
+
+- import_tasks: nextcloud_container.yml
