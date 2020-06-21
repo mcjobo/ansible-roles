@@ -1,0 +1,21 @@
+- name: "create group sudo"
+  group:
+    name: "sudo"
+- name: "Create user accounts and add users to groups"
+  user:
+    name: "{{ item }}"
+    groups: "sudo"
+    shell: "/bin/bash"
+  with_items: "{{ users }}"
+- name: "Add authorized_keys"
+  authorized_key:
+    user: "{{ item }}"
+    key: "{{ lookup('file', 'files/'+ item + '.key.pub') }}"
+  with_items: "{{ users }}"
+- name: "set sudo without password"
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%sudo'
+    line: '%sudo ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'

@@ -1,0 +1,5 @@
+---
+# tasks file for init-hetzner-cloud
+
+- import_tasks: create-users.yml
+- import_tasks: install-podman.yml

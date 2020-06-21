@@ -1,0 +1,11 @@
+- name: "install the epel repo"
+  include_role:
+    name: "geerlingguy.repo-epel"
+- name: "update all packages"
+  dnf:
+    name: "*"
+    state: latest
+- name: "install podman on the system"
+  dnf:
+    name: "@container-tools"
+    state: present
