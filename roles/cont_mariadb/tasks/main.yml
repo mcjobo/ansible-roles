@@ -1,0 +1,4 @@
+---
+# tasks file for roles/cont_mariadb
+
+- import_tasks: mariadb_container.yml

@@ -1,0 +1,14 @@
+---
+# defaults file for roles/cont_mariadb
+
+LISTEN_PORT: 3306
+container_name: mariadb
+systemd_TimeoutStartSec: 15
+container_run_as_user: root
+#-p {{LISTEN_PORT}}:3306
+container_run_args:   --pod nextcloud  -v /srv/mariadb:/var/lib/mysql -e VIRTUAL_HOST=files.bolay.org -e MYSQL_ROOT_PASSWORD=puGPkCf1zkl6SGZ5D6Oz -e MYSQL_DATABASE=nextcloud -e MYSQL_USER=nextcloud -e MYSQL_PASSWORD=puGPkCf1zkl6SGZ5D6Oz
+container_image: mariadb
+container_cmd_args:
+container_stop_timeout: 15
+container_restart: on-failure
+systemd_RestartSec: 30
