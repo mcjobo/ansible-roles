@@ -1,0 +1,6 @@
+---
+# main.yml to create users copy their certificate and put it in the sudoers 
+#
+# 
+
+- import_tasks: create-user.yml
