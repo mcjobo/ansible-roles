@@ -1,0 +1,12 @@
+---
+# defaults file for roles/cont_proxy
+
+container_name: letsencrypt
+systemd_TimeoutStartSec: 15
+container_run_as_user: root
+container_run_args:  -p 443:443 -p 80:80 -v /srv/proxy:/config -e PUID=1000 -e PGID=1000 -e -e URL=files.bolay.org 
+container_image: linuxserver/letsencrypt
+container_cmd_args:
+container_stop_timeout: 15
+container_restart: on-failure
+systemd_RestartSec: 30

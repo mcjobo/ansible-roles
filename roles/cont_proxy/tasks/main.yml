@@ -1,0 +1,4 @@
+---
+# tasks file for roles/cont_proxy
+
+- import_tasks: nginx_proxy.yml

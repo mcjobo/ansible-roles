@@ -1,0 +1,25 @@
+- name: "pull das letsencrypt nginx proxy image"
+  podman_image:
+    name: '{{container_image}}'
+
+- name: "Create  the letsencrypt nginx proxy volume directory"
+  file:
+    path: /srv/proxy
+    state: directory
+    mode: '0755'
+
+
+- name: "create systemd service file for container: {{ container_name }}"
+  template:
+    src: systemd-service-single.j2
+    dest: "/etc/systemd/system/{{container_name}}.service"
+    owner: root
+    group: root
+    mode: 0644
+    force: yes
+  notify: reload systemctl
+- name: "start {{ container_name }} service"
+  systemd:
+    name: "{{container_name}}"
+    state: restarted
+    enabled: yes
