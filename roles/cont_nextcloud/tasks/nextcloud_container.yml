@@ -1,33 +1,26 @@
-#- name: "setzen der notwendigen variablen"
- # vars:
-    #LISTEN_PORT: 8085
-    #container_name: signal-cli-rest-api
-    #systemd_TimeoutStartSec: 15
-    #container_run_as_user: root
-    #container_run_args:  -p {{LISTEN_PORT}}:8080 -v /srv/signal-cli-rest-api/:/home/.local/share/signal-cli
-    #container_image: nextcloud
-    #container_cmd_args:
-    #container_stop_timeout: 15
-    #container_restart: on-failure
-    #systemd_RestartSec: 30
+- name: get service facts
+  service_facts:
+
+- name: "stop {{ container_name }} service"
+  systemd:
+    name: "{{container_name}}"
+    state: stopped
+    enabled: yes
+  when: ansible_facts.services["{{ container_name }}.service"] is defined
 
 - name: "pull das nextcloud image"
   podman_image:
     name: '{{container_image}}'
 
-- name: "Create  the nextcloud volume directory"
+- name: "Create  the nextcloud config directory"
   file:
-    path: /srv/nextcloud/config
+    path: /srv/nextcloud2/config
     state: directory
     mode: '0755'
-- name: "Create  the nextcloud volume directory"
+    
+- name: "Create  the nextcloud data directory"
   file:
-    path: /srv/nextcloud/apps
-    state: directory
-    mode: '0755'
-- name: "Create  the nextcloud volume directory"
-  file:
-    path: /srv/nextcloud/data
+    path: /srv/nextcloud2/data
     state: directory
     mode: '0755'
 
@@ -40,9 +33,14 @@
     mode: 0644
     force: yes
   notify: reload systemctl
+
 - name: "start {{ container_name }} service"
   systemd:
     name: "{{container_name}}"
     daemon_reload: true
     state: restarted
     enabled: yes
+
+- name: "set nextcloud ip to variable nextcloud_ip"
+  shell: "podman inspect --format '{''{ .NetworkSettings.IPAddress }''}' nextcloud"
+  register: nextcloud_ip

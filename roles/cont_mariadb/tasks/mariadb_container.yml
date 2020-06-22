@@ -1,10 +1,20 @@
+- name: get service facts
+  service_facts:
+
+- name: "stop {{ container_name }} service"
+  systemd:
+    name: "{{container_name}}"
+    state: stopped
+    enabled: yes
+  when: ansible_facts.services["{{ container_name }}.service"] is defined
+
 - name: "pull das mariadb image"
   podman_image:
     name: '{{container_image}}'
 
 - name: "Create  the mariadb volume directory"
   file:
-    path: /srv/mariadb/
+    path: /srv/mariadb2/
     state: directory
     mode: '0755'
 - name: "create systemd service file for container: {{ container_name }}"
@@ -22,3 +32,17 @@
     daemon_reload: true
     state: restarted
     enabled: yes
+- name: "enable access to mariadb an the local system"
+  lineinfile:
+    path: /srv/mariadb2/custom.cnf
+    regexp: '#bind-address=0.0.0.0'
+    line: 'bind-address=0.0.0.0'
+- name: "start {{ container_name }} service"
+  systemd:
+    name: "{{container_name}}"
+    daemon_reload: true
+    state: restarted
+    enabled: yes
+- name: "set mariadb ip to variable mysql_ip"
+  shell: "podman inspect --format '{''{ .NetworkSettings.IPAddress }''}' mariadb"
+  register: mysql_ip

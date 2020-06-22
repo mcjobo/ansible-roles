@@ -5,8 +5,8 @@ LISTEN_PORT: 8080
 container_name: nextcloud
 systemd_TimeoutStartSec: 15
 container_run_as_user: root
-container_run_args:  --pod nextcloud -p {{LISTEN_PORT}}:80 -v /srv/nextcloud/apps:/var/www/html/apps -v /srv/nextcloud/config:/var/www/html/config -v /srv/nextcloud/data:/var/www/html/data -e VIRTUAL_HOST=files.bolay.org -e VIRTUAL_PORT=80 
-container_image: nextcloud
+container_run_args:   -p {{LISTEN_PORT}}:443 -v /srv/nextcloud2/config:/config -v /srv/nextcloud2/data:/data -e PUID=1000 -e PGID=1000 -e TZ=Europe/Berlin 
+container_image: linuxserver/nextcloud
 container_cmd_args:
 container_stop_timeout: 15
 container_restart: on-failure
