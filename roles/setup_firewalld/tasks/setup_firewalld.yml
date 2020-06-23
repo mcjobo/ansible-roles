@@ -1,0 +1,12 @@
+- name: "open ports defined in firewalld_open_ports"
+  firewalld:
+    service: "{{item}}"
+    permanent: yes
+    state: enabled
+  with_items: "{{ firewalld_open_ports }}"
+
+- name: "start & enable firewalld service"
+  systemd:
+    name: firewalld
+    state: restarted
+    enabled: yes

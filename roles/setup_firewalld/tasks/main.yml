@@ -1,0 +1,5 @@
+---
+# tasks file for roles/setup_firewalld
+
+- import_tasks: install_firewalld.yml
+- import_tasks: setup_firewalld.yml

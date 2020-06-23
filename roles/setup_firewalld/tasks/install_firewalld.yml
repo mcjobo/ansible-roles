@@ -1,0 +1,8 @@
+- name: "update the system"
+  dnf:
+    name: "*"
+    state: latest
+- name: "install firewalld on the system"
+  dnf:
+    name: "firewalld"
+    state: present
