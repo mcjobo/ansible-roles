@@ -1,0 +1,12 @@
+- name: "add kubic repo"
+  apt_repository:
+    repo: 'deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Raspbian_10/ /'
+    state: present
+  when: ansible_os_family | lower == 'debian'
+- name: "add kubic repo key"
+  apt_key:
+    url: 'https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/Raspbian_10/Release.key'
+    state: present
+  when: ansible_os_family | lower == 'debian'
+
+  

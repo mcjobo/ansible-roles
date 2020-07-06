@@ -1,0 +1,5 @@
+---
+# tasks file for install_podman
+
+- include_tasks: install_repo.yml
+- include_tasks: install_podman.yml

@@ -1,0 +1,12 @@
+- name: "install podman debian"
+  apt:
+    name: podman
+    state: present
+  when: ansible_os_family | lower == 'debian'
+
+- name: "install podman redhat"
+  dnf:
+    name: podman
+    state: present
+  when: ansible_os_family | lower == 'redhat'
+  
