@@ -36,6 +36,10 @@
   debug:
     var: "nextcloud_ip.stdout"
 
+- name: Wait until the file /srv/proxy2/nginx/proxy-confs/nextcloud.subdomain.conf.sample is present before continuing
+  wait_for:
+    path: /srv/proxy2/nginx/proxy-confs/nextcloud.subdomain.conf.sample
+
 - name: "copy nextcloud proxy file"
   copy:
     src: /srv/proxy2/nginx/proxy-confs/nextcloud.subdomain.conf.sample

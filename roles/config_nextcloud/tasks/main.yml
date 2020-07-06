@@ -1,0 +1,4 @@
+---
+# tasks file for roles/config_nextcloud
+
+- import_tasks: config_nextcloud.yml

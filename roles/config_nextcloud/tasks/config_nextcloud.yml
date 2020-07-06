@@ -1,0 +1,64 @@
+- name: ensure file exists
+  copy:
+    content: ""
+    dest: /srv/nextcloud2/config/www/nextcloud/config/autoconfig.php
+    force: no
+
+
+- name: "insert config values in nextcloud autoconfig file"
+  blockinfile:
+    path: /srv/nextcloud2/config/www/nextcloud/config/autoconfig.php
+    marker: "// {mark} ANSIBLE MANAGED BLOCK " 
+    block: |
+      <?php
+        $AUTOCONFIG = array(
+        "dbtype"        => "mysql",
+        "dbname"        => "nextcloud",
+        "dbuser"        => "nextcloud",
+        "dbpass"        => "{{MYSQL_PASSWORD}}",
+        "dbhost"        => "{{mysql_ip.stdout}}",
+        "dbtableprefix" => "oc_",
+        "adminlogin"    => "root",
+        "adminpass"     => "root-password",
+      );
+
+- name: "insert config values in nextcloud config file"
+  blockinfile:
+    path: /srv/nextcloud2/config/www/nextcloud/config/config.php
+    marker: "// {mark} ANSIBLE MANAGED BLOCK "
+    insertbefore: '^\s*\);' 
+    block: |
+      'passwordsalt' => 'pC5lG13bqtYWpA12nnin71k+wN3hJK',
+      'secret' => 'DkNU/VpLorn9GwSdTmgm2qfIpqyf03h8BUcugQbu/+/cbk/m',
+      'trusted_domains' =>
+      array (
+        0 => 'files.bolay.org',
+        1 => 'next.bolay.org',
+      ),
+      'overwriteprotocol' => 'https',
+      'datadirectory' => '/var/www/html/data',
+      'overwrite.cli.url' => 'https://files.bolay.org',
+      'mysql.utf8mb4' => true,
+      'mail_smtpmode' => 'smtp',
+      'mail_smtpauthtype' => 'LOGIN',
+      'mail_smtpsecure' => 'tls',
+      'mail_from_address' => 'backup',
+      'mail_domain' => 'bolay.org',
+      'mail_smtpauth' => 1,
+      'mail_smtphost' => 'bolay.org',
+      'mail_smtpport' => '25',
+      'mail_smtpname' => 'backup@bolay.org',
+      'mail_smtppassword' => '{{SMTP_PASSWORD}}',
+      'theme' => '',
+      'loglevel' => 0,
+      'maintenance' => false,
+      'ldapIgnoreNamingRules' => false,
+      'ldapProviderFactory' => '\\OCA\\User_LDAP\\LDAPProviderFactory',
+
+
+- name: "restart nextcloud service"
+  systemd:
+    name: "nextcloud"
+    daemon_reload: true
+    state: restarted
+    enabled: yes
